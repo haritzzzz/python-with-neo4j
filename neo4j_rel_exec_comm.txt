@@ -1,0 +1,74 @@
+#for create rel between player and team #251
+MATCH (p:Player)
+match (t:Team {TeamName: p.Team})
+MERGE (p)-[re:IS_MEMBER_OF]->(t)
+
+#for create rel between player and league #251
+MATCH (p:Player)
+match (l:League {LeagueName: p.League})
+MERGE (p)-[re:IS_PLAY_IN]->(l)
+
+#for create rel between player and role #251
+MATCH (p:Player)
+match (r:Role {RoleName: p.Role})
+MERGE (p)-[re:IS_PLAY_IN_POSITION]->(r)
+
+#for create rel between player and champion #579
+MATCH (p:Player)
+match (c1:Champion {ChampionName : p.MostPlayed1})
+match (c2:Champion {ChampionName : p.MostPlayed2})
+match (c3:Champion {ChampionName : p.MostPlayed3})
+MERGE (p)-[re1:MOST_PLAY_THIS]->(c1)
+MERGE (p)-[re2:MOST_PLAY_THIS]->(c2)
+MERGE (p)-[re3:MOST_PLAY_THIS]->(c3)
+
+#for create rel between champion and recomment_item #162
+MATCH (c:Champion)
+match (Ritem:RecommentItem {ForChampName :c.ChampionName})
+MERGE (c)-[re:RECOMMENT_ITEM_BUILD]->(Ritem)
+
+#for create rel between recomment_item and item #972
+MATCH (Ritem:RecommentItem)
+match (item1:Item {ItemName : Ritem.First})
+match (item2:Item {ItemName : Ritem.Second})
+match (item3:Item {ItemName : Ritem.Third})
+match (item4:Item {ItemName : Ritem.Fourth})
+match (item5:Item {ItemName : Ritem.Fifth})
+match (item6:Item {ItemName : Ritem.Sixth})
+MERGE (Ritem)-[re1:MOST_PLAY_THIS]->(item1)
+MERGE (Ritem)-[re2:MOST_PLAY_THIS]->(item2)
+MERGE (Ritem)-[re3:MOST_PLAY_THIS]->(item3)
+MERGE (Ritem)-[re4:MOST_PLAY_THIS]->(item4)
+MERGE (Ritem)-[re5:MOST_PLAY_THIS]->(item5)
+MERGE (Ritem)-[re6:MOST_PLAY_THIS]->(item6)
+
+#for create rel between champion and recomment_rune #162
+MATCH (c:Champion)
+match (Rrune:RecommentRune {ForChamp :c.ChampionName})
+MERGE (c)-[re:RECOMMENT_RUNE_BUILD]->(Rrune)
+
+#for create rel between recomment_rune and spell #324
+MATCH (Rrune:RecommentRune)
+match (spl1:Spell {SpellName : Rrune.Spell1})
+match (spl2:Spell {SpellName : Rrune.Spell2})
+MERGE (Rrune)-[re1:BEST_SPELL_IS]->(spl1)
+MERGE (Rrune)-[re2:BEST_SPELL_IS]->(spl2)
+
+#for create rel between recomment_rune and RuneTree, SubRune, Keystone #1296
+MATCH (Rrune:RecommentRune)
+match (tree1:RuneTree {RuneTreeName : Rrune.PrimaryRuneTree})
+match (k:KeyStone {RuneKeystone : Rrune.RuneKey})
+match (sub1:SubRune {SubRuneName : Rrune.PrimaryRune1})
+match (sub2:SubRune {SubRuneName : Rrune.PrimaryRune2})
+match (sub3:SubRune {SubRuneName : Rrune.PrimaryRune3})
+match (tree2:RuneTree {RuneTreeName : Rrune.SecondaryRuneTree})
+match (sub4:SubRune {SubRuneName : Rrune.SecondaryRune1})
+match (sub5:SubRune {SubRuneName : Rrune.SecondaryRune2})
+MERGE (Rrune)-[re1:BEST_PRIMARY_TREE_IS]->(tree1)
+MERGE (Rrune)-[re2:BEST_PRIMARY_KEY_STONE_IS]->(k)
+MERGE (Rrune)-[re3:BEST_PRIMARY_SUB_RUNE_IS]->(sub1)
+MERGE (Rrune)-[re4:BEST_PRIMARY_SUB_RUNE_IS]->(sub2)
+MERGE (Rrune)-[re5:BEST_PRIMARY_SUB_RUNE_IS]->(sub3)
+MERGE (Rrune)-[re6:BEST_SECONDARY_TREE_IS]->(tree2)
+MERGE (Rrune)-[re7:BEST_SECONDARY_SUB_RUNE_IS]->(sub4)
+MERGE (Rrune)-[re8:BEST_SECONDARY_SUB_RUNE_IS]->(sub5)
